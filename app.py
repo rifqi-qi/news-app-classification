@@ -1,10 +1,13 @@
 import streamlit as st
+import pandas as pd
 import joblib
-from nltk.tokenize import RegexpTokenizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 import re
+import nltk
 from nltk.corpus import stopwords
+from nltk.stem import PorterStemmer
+from nltk.tokenize import word_tokenize
 
 # Fungsi untuk preprocessing teks
 def preprocess_text(text):
@@ -15,18 +18,22 @@ def preprocess_text(text):
     text = re.sub(r'\d+', '', text)  # Menghapus angka
     text = re.sub(r'[^\w\s]', '', text)  # Menghapus tanda baca dan karakter khusus
     
-    # 3. Tokenisasi: Memecah teks menjadi kata-kata menggunakan regex
-    tokenizer = RegexpTokenizer(r'\w+')
-    words = tokenizer.tokenize(text)
-
+    # 3. Tokenisasi: Memecah teks menjadi kata-kata
+    words = word_tokenize(text)
+    
     # 4. Menghapus stopwords: kata-kata umum yang tidak membawa banyak informasi
     stop_words = set(stopwords.words('indonesian'))
     words = [word for word in words if word not in stop_words]
+    
+    # 5. Stemming: Mengubah kata ke bentuk dasar menggunakan Sastrawi
+    stemmer = PorterStemmer()
+    words = [stemmer.stem(word) for word in words]
     
     # Menggabungkan kata-kata kembali menjadi satu kalimat
     processed_text = ' '.join(words)
     
     return processed_text
+
 
 # Memuat model dan TF-IDF vectorizer yang telah dilatih
 model = joblib.load('logistic_regression_model.pkl')
@@ -50,9 +57,11 @@ if st.button("Klasifikasikan"):
 
         # Melakukan prediksi
         prediction = model.predict(text_tfidf)
-        predicted_category = "Kesehatan" if prediction[0] == "Kesehatan" else "Olahraga"
+        predicted_category = "Kesehatan" if prediction [0] ==  "Kesehatan" else "Olahraga"
 
         # Menampilkan hasil prediksi
         st.write(f"Hasil Klasifikasi: **{predicted_category}**")
     else:
         st.write("Silakan masukkan teks berita terlebih dahulu.")
+
+
