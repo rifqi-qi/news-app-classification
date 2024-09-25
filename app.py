@@ -1,12 +1,9 @@
 import streamlit as st
 import pandas as pd
 import joblib
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.linear_model import LogisticRegression
 import re
 import nltk
 from nltk.corpus import stopwords
-from nltk.stem import PorterStemmer
 from nltk.tokenize import word_tokenize
 
 nltk.download('punkt_tab')
