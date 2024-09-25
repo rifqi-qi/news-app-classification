@@ -7,11 +7,17 @@ import re
 import nltk
 from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
-from nltk.tokenize import word_tokenize
 
 # Unduh sumber daya NLTK jika belum ada
-nltk.download('punkt')
-nltk.download('stopwords')
+try:
+    nltk.data.find('tokenizers/punkt')
+except LookupError:
+    nltk.download('punkt')
+
+try:
+    nltk.data.find('stopwords')
+except LookupError:
+    nltk.download('stopwords')
 
 # Fungsi untuk preprocessing teks
 def preprocess_text(text):
@@ -23,7 +29,7 @@ def preprocess_text(text):
     text = re.sub(r'[^\w\s]', '', text)  # Menghapus tanda baca dan karakter khusus
     
     # 3. Tokenisasi: Memecah teks menjadi kata-kata
-    words = word_tokenize(text)
+    words = nltk.word_tokenize(text)  # Menggunakan word_tokenize dari NLTK
     
     # 4. Menghapus stopwords: kata-kata umum yang tidak membawa banyak informasi
     stop_words = set(stopwords.words('indonesian'))
@@ -37,7 +43,6 @@ def preprocess_text(text):
     processed_text = ' '.join(words)
     
     return processed_text
-
 
 # Memuat model dan TF-IDF vectorizer yang telah dilatih
 model = joblib.load('logistic_regression_model.pkl')
