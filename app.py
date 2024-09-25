@@ -35,7 +35,7 @@ model = joblib.load('logistic_regression_model.pkl')
 tfidf = joblib.load('tfidf_vectorizer.pkl')
 
 # Judul aplikasi
-st.title("Aplikasi Klasifikasi Berita")
+st.title("News Classification App")
 
 # Input teks dari pengguna
 st.write("Aplikasi ini secara otomatis mengklasifikasikan berita menjadi dua kategori: Olahraga dan Kesehatan, menggunakan Logistic Regression dan TF-IDF. Setelah pengguna memasukkan teks berita, aplikasi memprosesnya dan menampilkan hasil klasifikasi berdasarkan topik utama berita.")
