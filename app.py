@@ -38,7 +38,7 @@ tfidf = joblib.load('tfidf_vectorizer.pkl')
 st.title("Aplikasi Klasifikasi Berita")
 
 # Input teks dari pengguna
-st.subheader("Masukkan Berita yang Akan Diklasifikasikan")
+st.subheader("Aplikasi ini secara otomatis mengklasifikasikan berita menjadi dua kategori: Olahraga dan Kesehatan, menggunakan Logistic Regression dan TF-IDF. Setelah pengguna memasukkan teks berita, aplikasi memprosesnya dan menampilkan hasil klasifikasi berdasarkan topik utama berita.")
 user_input = st.text_area("Masukkan teks berita di bawah ini:")
 
 # Tombol untuk memproses input
