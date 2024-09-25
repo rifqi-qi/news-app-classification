@@ -64,7 +64,7 @@ if st.button("Klasifikasikan"):
         hasil_prediksi = loaded_model.predict(loaded_tfidf.transform([processed_text]))
         
         # Ambil kategori langsung dari hasil prediksi
-        kategori_prediksi = hasil_prediksi[0]  # Jika hasilnya sudah berupa teks seperti "Kesehatan" atau "Olahraga"
+        kategori_prediksi = hasil_prediksi[0]  
 
         # Tampilkan hasil prediksi
         st.write(f"Hasil Klasifikasi: **{kategori_prediksi}**")
