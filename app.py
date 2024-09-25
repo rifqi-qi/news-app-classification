@@ -45,7 +45,7 @@ def preprocess_text(text):
 
 # Fungsi untuk memberi label kategori berita
 def label_berita(hasil):
-    label = {0: 'Kesehatan', 1: 'Pariwisata'}
+    label = {0: 'Kesehatan', 1: 'Olahraga'}
     return label.get(hasil, "Kategori tidak dikenali")
 
 # Memuat model yang sudah disimpan
