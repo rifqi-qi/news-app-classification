@@ -1,13 +1,10 @@
 import streamlit as st
-import pandas as pd
 import joblib
 from nltk.tokenize import RegexpTokenizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 import re
-import nltk
 from nltk.corpus import stopwords
-from nltk.stem import PorterStemmer
 
 # Fungsi untuk preprocessing teks
 def preprocess_text(text):
@@ -20,7 +17,7 @@ def preprocess_text(text):
     
     # 3. Tokenisasi: Memecah teks menjadi kata-kata menggunakan regex
     tokenizer = RegexpTokenizer(r'\w+')
-    text_token = tokenizer.tokenize(txt_no_numbers)
+    words = tokenizer.tokenize(text)
 
     # 4. Menghapus stopwords: kata-kata umum yang tidak membawa banyak informasi
     stop_words = set(stopwords.words('indonesian'))
@@ -30,7 +27,6 @@ def preprocess_text(text):
     processed_text = ' '.join(words)
     
     return processed_text
-
 
 # Memuat model dan TF-IDF vectorizer yang telah dilatih
 model = joblib.load('logistic_regression_model.pkl')
