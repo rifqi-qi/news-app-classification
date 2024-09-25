@@ -68,7 +68,10 @@ if st.button("Klasifikasikan"):
         
         # Lakukan prediksi
         hasil_prediksi = loaded_model.predict(loaded_tfidf.transform([processed_text]))
-
+        
+        # Debug: Tampilkan hasil prediksi untuk memastikan nilainya
+        st.write(f"Hasil prediksi model: {hasil_prediksi[0]}")
+        
         # Ambil kategori berdasarkan prediksi
         kategori_prediksi = label_berita(hasil_prediksi[0])
 
