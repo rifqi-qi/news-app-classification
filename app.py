@@ -49,7 +49,7 @@ def label_berita(hasil):
     return label.get(hasil, "Kategori tidak dikenali")
 
 # Memuat model yang sudah disimpan
-loaded_model = joblib.load('logistic_model.pkl')
+loaded_model = joblib.load('logistic_regression_model.pkl')
 loaded_tfidf = joblib.load('tfidf_vectorizer.pkl')
 
 # Judul Aplikasi
