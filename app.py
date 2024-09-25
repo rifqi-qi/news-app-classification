@@ -45,7 +45,8 @@ def preprocess_text(text):
 
 # Fungsi untuk memberi label kategori berita
 def label_berita(hasil):
-    label = {1: 'Kesehatan', 0: 'Olahraga'}
+    # Sesuaikan label dengan prediksi yang dihasilkan model
+    label = {0: 'Olahraga', 1: 'Kesehatan'}  # Pastikan label sesuai dengan output model
     return label.get(hasil, "Kategori tidak dikenali")
 
 # Memuat model yang sudah disimpan
@@ -60,16 +61,21 @@ st.subheader("Masukkan Berita yang Akan Diklasifikasikan")
 input_text = st.text_area("Masukkan teks berita di bawah ini:")
 
 # Tombol untuk klasifikasi
-if st.button("Prediksi Kategori Berita"):
+if st.button("Klasifikasikan"):
     if input_text:
         # Preprocess teks input
         processed_text = preprocess_text(input_text)
         
         # Lakukan prediksi
         hasil_prediksi = loaded_model.predict(loaded_tfidf.transform([processed_text]))
+        
+        # Debug: Tampilkan hasil prediksi untuk memastikan nilainya
+        st.write(f"Hasil prediksi model: {hasil_prediksi[0]}")
+        
+        # Ambil kategori berdasarkan prediksi
         kategori_prediksi = label_berita(hasil_prediksi[0])
 
         # Tampilkan hasil prediksi
-        st.write(f"Kategori berita: **{kategori_prediksi}**")
+        st.write(f"Hasil Klasifikasi: **{kategori_prediksi}**")
     else:
-        st.write("Silakan masukkan teks berita untuk diklasifikasi.")
+        st.write("Silakan masukkan teks berita terlebih dahulu.")
