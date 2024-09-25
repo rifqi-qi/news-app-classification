@@ -43,12 +43,6 @@ def preprocess_text(text):
     clean_text = ' '.join(text_filtered)
     return clean_text
 
-# Fungsi untuk memberi label kategori berita
-def label_berita(hasil):
-    # Sesuaikan label dengan prediksi yang dihasilkan model
-    label = {0: 'Olahraga', 1: 'Kesehatan'}  # Pastikan label sesuai dengan output model
-    return label.get(hasil, "Kategori tidak dikenali")
-
 # Memuat model yang sudah disimpan
 loaded_model = joblib.load('logistic_regression_model.pkl')
 loaded_tfidf = joblib.load('tfidf_vectorizer.pkl')
@@ -69,11 +63,8 @@ if st.button("Klasifikasikan"):
         # Lakukan prediksi
         hasil_prediksi = loaded_model.predict(loaded_tfidf.transform([processed_text]))
         
-        # Debug: Tampilkan hasil prediksi untuk memastikan nilainya
-        st.write(f"Hasil prediksi model: {hasil_prediksi[0]}")
-        
-        # Ambil kategori berdasarkan prediksi
-        kategori_prediksi = label_berita(hasil_prediksi[0])
+        # Ambil kategori langsung dari hasil prediksi
+        kategori_prediksi = hasil_prediksi[0]  # Jika hasilnya sudah berupa teks seperti "Kesehatan" atau "Olahraga"
 
         # Tampilkan hasil prediksi
         st.write(f"Hasil Klasifikasi: **{kategori_prediksi}**")
