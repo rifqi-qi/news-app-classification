@@ -9,6 +9,10 @@ from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
 from nltk.tokenize import word_tokenize
 
+# Unduh sumber daya NLTK jika belum ada
+nltk.download('punkt')
+nltk.download('stopwords')
+
 # Fungsi untuk preprocessing teks
 def preprocess_text(text):
     # 1. Case Folding: Mengubah semua huruf menjadi huruf kecil
@@ -25,7 +29,7 @@ def preprocess_text(text):
     stop_words = set(stopwords.words('indonesian'))
     words = [word for word in words if word not in stop_words]
     
-    # 5. Stemming: Mengubah kata ke bentuk dasar menggunakan Sastrawi
+    # 5. Stemming: Mengubah kata ke bentuk dasar
     stemmer = PorterStemmer()
     words = [stemmer.stem(word) for word in words]
     
@@ -57,11 +61,9 @@ if st.button("Klasifikasikan"):
 
         # Melakukan prediksi
         prediction = model.predict(text_tfidf)
-        predicted_category = "Kesehatan" if prediction [0] ==  "Kesehatan" else "Olahraga"
+        predicted_category = "Kesehatan" if prediction[0] == "Kesehatan" else "Olahraga"
 
         # Menampilkan hasil prediksi
         st.write(f"Hasil Klasifikasi: **{predicted_category}**")
     else:
         st.write("Silakan masukkan teks berita terlebih dahulu.")
-
-
