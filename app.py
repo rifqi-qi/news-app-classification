@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import joblib
+from nltk.tokenize import RegexpTokenizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 import re
@@ -18,15 +19,12 @@ def preprocess_text(text):
     text = re.sub(r'[^\w\s]', '', text)  # Menghapus tanda baca dan karakter khusus
     
     # 3. Tokenisasi: Memecah teks menjadi kata-kata menggunakan regex
-    words = re.findall(r'\w+', text)  # Mengambil semua kata
+    tokenizer = RegexpTokenizer(r'\w+')
+    text_token = tokenizer.tokenize(txt_no_numbers)
 
     # 4. Menghapus stopwords: kata-kata umum yang tidak membawa banyak informasi
     stop_words = set(stopwords.words('indonesian'))
     words = [word for word in words if word not in stop_words]
-    
-    # 5. Stemming: Mengubah kata ke bentuk dasar
-    stemmer = PorterStemmer()
-    words = [stemmer.stem(word) for word in words]
     
     # Menggabungkan kata-kata kembali menjadi satu kalimat
     processed_text = ' '.join(words)
