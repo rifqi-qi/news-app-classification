@@ -1,72 +1,65 @@
 import streamlit as st
-import re
-from nltk.tokenize import RegexpTokenizer
-from nltk.corpus import stopwords
-import nltk
+import pandas as pd
 import joblib
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.linear_model import LogisticRegression
+import re
+import nltk
+from nltk.corpus import stopwords
+from nltk.stem import PorterStemmer
+from nltk.tokenize import word_tokenize
 
-# Pastikan stopwords diunduh jika belum ada
-nltk.download('stopwords')
-
-# Fungsi Preprocessing
+# Fungsi untuk preprocessing teks
 def preprocess_text(text):
-    if isinstance(text, list):
-        text = ' '.join(text)
+    # 1. Case Folding: Mengubah semua huruf menjadi huruf kecil
+    text = text.lower()
+    
+    # 2. Menghilangkan angka dan karakter khusus
+    text = re.sub(r'\d+', '', text)  # Menghapus angka
+    text = re.sub(r'[^\w\s]', '', text)  # Menghapus tanda baca dan karakter khusus
+    
+    # 3. Tokenisasi: Memecah teks menjadi kata-kata
+    words = word_tokenize(text)
+    
+    # 4. Menghapus stopwords: kata-kata umum yang tidak membawa banyak informasi
+    stop_words = set(stopwords.words('indonesian'))
+    words = [word for word in words if word not in stop_words]
+    
+    # 5. Stemming: Mengubah kata ke bentuk dasar menggunakan Sastrawi
+    stemmer = PorterStemmer()
+    words = [stemmer.stem(word) for word in words]
+    
+    # Menggabungkan kata-kata kembali menjadi satu kalimat
+    processed_text = ' '.join(words)
+    
+    return processed_text
 
-    # Lowercase teks
-    txt_casefold = text.lower()
 
-    # Menghapus URL
-    txt_nourl = re.sub(r'http\S+|www\S+|https\S+', '', txt_casefold, flags=re.MULTILINE)
+# Memuat model dan TF-IDF vectorizer yang telah dilatih
+model = joblib.load('logistic_regression_model.pkl')
+tfidf = joblib.load('tfidf_vectorizer.pkl')
 
-    # Menghapus mentions (@username)
-    txt_no_mentions = re.sub(r'@\w+', '', txt_nourl)
-
-    # Menghapus hashtag
-    txt_no_hashtags = re.sub(r'#\w+', '', txt_no_mentions)
-
-    # Menghapus angka
-    txt_no_numbers = re.sub(r'\d+', '', txt_no_hashtags)
-
-    # Menghapus tanda baca dan tokenisasi
-    tokenizer = RegexpTokenizer(r'\w+')
-    text_token = tokenizer.tokenize(txt_no_numbers)
-
-    # Menghapus stop words Bahasa Indonesia
-    stop_words = stopwords.words('indonesian')
-    stop_words.extend(['scroll', 'to', 'continue', 'with', 'advertisement', 'content'])
-    stop_words = set(stop_words)
-
-    text_filtered = [word for word in text_token if word not in stop_words]
-
-    # Menggabungkan kembali kata-kata menjadi kalimat
-    clean_text = ' '.join(text_filtered)
-    return clean_text
-
-# Memuat model yang sudah disimpan
-loaded_model = joblib.load('logistic_regression_model.pkl')
-loaded_tfidf = joblib.load('tfidf_vectorizer.pkl')
-
-# Judul Aplikasi
+# Judul aplikasi
 st.title("Aplikasi Klasifikasi Berita")
 
-# Input dari pengguna
+# Input teks dari pengguna
 st.subheader("Masukkan Berita yang Akan Diklasifikasikan")
-input_text = st.text_area("Masukkan teks berita di bawah ini:")
+user_input = st.text_area("Masukkan teks berita di bawah ini:")
 
-# Tombol untuk klasifikasi
+# Tombol untuk memproses input
 if st.button("Klasifikasikan"):
-    if input_text:
-        # Preprocess teks input
-        processed_text = preprocess_text(input_text)
-        
-        # Lakukan prediksi
-        hasil_prediksi = loaded_model.predict(loaded_tfidf.transform([processed_text]))
-        
-        # Ambil kategori langsung dari hasil prediksi
-        kategori_prediksi = hasil_prediksi[0]  
+    if user_input:
+        # Preprocessing input
+        preprocessed_text = preprocess_text(user_input)
 
-        # Tampilkan hasil prediksi
-        st.write(f"Hasil Klasifikasi: **{kategori_prediksi}**")
+        # Transformasi teks menggunakan TF-IDF
+        text_tfidf = tfidf.transform([preprocessed_text])
+
+        # Melakukan prediksi
+        prediction = model.predict(text_tfidf)
+        predicted_category = "Kesehatan" if prediction [0] ==  "Kesehatan" else "Olahraga"
+
+        # Menampilkan hasil prediksi
+        st.write(f"Hasil Klasifikasi: **{predicted_category}**")
     else:
         st.write("Silakan masukkan teks berita terlebih dahulu.")
