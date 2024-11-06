@@ -45,10 +45,10 @@ pipeline = joblib.load('tfidf_logistic (1).pkl')
 
 
 # Judul aplikasi
-st.title("Aplikasi Klasifikasi Berita (SVD)")
+st.title("Aplikasi Klasifikasi Berita ")
 
 # Input teks dari pengguna
-st.write("Aplikasi ini secara otomatis mengklasifikasikan berita menjadi dua kategori: Olahraga dan Kesehatan, menggunakan Logistic Regression dan Reduksi dimensi dengan Singular Value Decomposition (SVD). Setelah pengguna memasukkan teks berita, aplikasi memprosesnya dan menampilkan hasil klasifikasi berdasarkan topik utama berita.")
+st.write("Aplikasi ini secara otomatis mengklasifikasikan berita menjadi dua kategori: Olahraga dan Kesehatan, menggunakan Logistic Regression dan TF-IDF. Setelah pengguna memasukkan teks berita, aplikasi memprosesnya dan menampilkan hasil klasifikasi berdasarkan topik utama berita.")
 
 user_input = st.text_area("Masukkan teks berita di bawah ini:")
 
