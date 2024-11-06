@@ -41,7 +41,7 @@ def preprocess_text(text):
 
 
 # Memuat model dan TF-IDF vectorizer yang telah dilatih
-pipeline = joblib.load('svd_tfidf_pipeline.pkl')
+pipeline = joblib.load('tfidf_logistic (1).pkl')
 
 
 # Judul aplikasi
